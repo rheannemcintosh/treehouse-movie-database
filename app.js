@@ -1,4 +1,5 @@
 const db = require('./db');
+const { Actor } = db.models;
 const { Movie } = db.models;
 
 (async () => {
@@ -17,6 +18,10 @@ const { Movie } = db.models;
             releaseDate: '2004-04-14',
             isAvailableOnVHS: true,
         });
+        await Actor.create({
+            firstName: 'Tom',
+            lastName: 'Hanks',
+        })
         
     } catch (error) {
         if (error.name === 'SequelizeValidationError') {
