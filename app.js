@@ -19,6 +19,11 @@ const { Movie } = db.models;
         });
         
     } catch (error) {
-        console.log('Error connecting to the DB: ', error);
+        if (error.name === 'SequelizeValidationError') {
+            const errors = error.errors.map(err => err.message);
+            console.error('Validation errors: ', errors);
+        } else {
+            throw error;
+        }
     }
 }) ();
