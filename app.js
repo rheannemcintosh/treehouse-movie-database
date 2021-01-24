@@ -114,6 +114,9 @@ const { Op } = db.Sequelize;
         //}, { fields: ['isAvailableOnVHS'] }); 
         //console.log( toyStory3.get({ plain: true }) );
 
+        // Delete a record
+        const deleteIncredibles = await Movie.findByPk(2);
+        await deleteIncredibles.destroy();
 
     } catch (error) {
         if (error.name === 'SequelizeValidationError') {
