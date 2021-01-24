@@ -53,7 +53,10 @@ module.exports = (sequelize) => {
             allowNull: false,
             defaultValue: false,
         },
-    }, { sequelize });
+    }, { 
+        paranoid: true, // enable "soft deletes"
+        sequelize 
+    });
     
     return Movie;
 };
