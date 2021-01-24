@@ -1,6 +1,6 @@
 const db = require('./db');
-const { Actor } = db.models;
-const { Movie } = db.models;
+const { Movie, Actor } = db.models;
+const { Op } = db.Sequelize;
 
 (async () => {
     await db.sequelize.sync({ force: true });
@@ -45,7 +45,7 @@ const { Movie } = db.models;
         console.log( allMovies.map(movie => movie.toJSON()) );
 
         // Filter Movies
-        const people = await Person.findAll({
+        const people = await Actor.findAll({
             where: {
               lastName: 'Hanks'
             }
@@ -54,13 +54,44 @@ const { Movie } = db.models;
         console.log( people.map(person => person.toJSON()) );
 
         const movies = await Movie.findAll({
+            attributes: ['id', 'title'], // return only id and title
             where: {
-              runtime: 92,
+              runtime: 81,
               isAvailableOnVHS: true
             }
         });
         // SELECT * FROM Movies WHERE runtime = 92 AND isAvailableOnVHS = true;
         console.log( movies.map(movie => movie.toJSON()) );
+
+        const moviesReleaseDate = await Movie.findAll({
+            attributes: ['id', 'title'],
+            where: {
+                releaseDate: {
+                    [Op.gte]: '2004-01-01' // greater than or equal to the date
+                },
+                runtime: {
+                    [Op.gt]: 95, // greater than 95
+                    //[Op.between]: [75, 115]
+                },
+                title: {
+                    [Op.endsWith]: 'story'
+                    //[Op.startsWith]: 'toy'
+                }
+            },
+        });
+        console.log( moviesReleaseDate.map(movie => movie.toJSON()) );
+
+        const orderMovies = await Movie.findAll({
+            attributes: ['id', 'title'],
+            where: {
+                title: {
+                    [Op.endsWith]: 'story'
+                },        
+            },
+            order: [['id', 'DESC']] // IDs in descending order
+            //order: [['releaseDate', 'ASC']],
+        });
+        console.log( orderMovies.map(movie => movie.toJSON()) );
 
     } catch (error) {
         if (error.name === 'SequelizeValidationError') {
