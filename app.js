@@ -93,6 +93,28 @@ const { Op } = db.Sequelize;
         });
         console.log( orderMovies.map(movie => movie.toJSON()) );
 
+        // Update Toy Story 3 with save ()
+        const toyStory3 = await Movie.findByPk(3);
+        toyStory3.isAvailableOnVHS = true;
+        await toyStory3.save();
+        console.log( toyStory3.get({ plain: true }) );
+        
+        // Update Toy Story 3 with update ()
+        //const toyStory3 = await Movie.findByPk(3);
+        //await toyStory3.update({
+        //    isAvailableOnVHS: true,
+        //});
+        //console.log( toyStory3.get({ plain: true }) );
+    
+        // Specify fields to update
+        //const toyStory3 = await Movie.findByPk(3);
+        //await toyStory3.update({
+        //    title: 'Trinket Tale 3', // new title
+        //isAvailableOnVHS: true,
+        //}, { fields: ['isAvailableOnVHS'] }); 
+        //console.log( toyStory3.get({ plain: true }) );
+
+
     } catch (error) {
         if (error.name === 'SequelizeValidationError') {
             const errors = error.errors.map(err => err.message);
